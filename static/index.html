@@ -101,7 +101,9 @@
         <div class="result" id="result">
             <p>Your short URL:</p>
             <a id="shortURL" href="#" target="_blank"></a>
+            <button onclick="copyURL()" id="copyBtn">Copy</button>
         </div>
+        
     </div>
 
     <script>
@@ -125,6 +127,18 @@
             document.getElementById('shortURL').href = data.short_url;
             document.getElementById('result').style.display = 'block';
         }
+    async function copyURL() {
+        const shortURL = document.getElementById('shortURL').textContent;
+        try {
+            await navigator.clipboard.writeText(shortURL);
+            document.getElementById('copyBtn').textContent = 'Copied! ✓';
+            setTimeout(() => {
+                document.getElementById('copyBtn').textContent = 'Copy';
+            }, 2000);
+        } catch(err) {
+            alert('Copy failed!');
+        }
+    }
     </script>
 </body>
 </html>
