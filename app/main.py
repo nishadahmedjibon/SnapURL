@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from .database import engine, Base
 from .routes import router
 
@@ -23,6 +24,12 @@ app.add_middleware(
 def health_check():
     return {"status": "SnapURL is running 🚀"}
 
-app.include_router(router)
+@app.get("/")
+def serve_home():
+    return FileResponse("static/index.html")
 
-app.mount("/", StaticFiles(directory="static", html=True), name="static")  # ← add here
+@app.get("/analytics.html")
+def serve_analytics():
+    return FileResponse("static/analytics.html")
+
+app.include_router(router)
