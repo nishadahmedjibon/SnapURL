@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SnapURL</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        p {
+            color: #888;
+            margin-bottom: 24px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-bottom: 12px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #4f46e5;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #4f46e5;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #4338ca;
+        }
+
+        .result {
+            margin-top: 24px;
+            padding: 16px;
+            background-color: #f0fdf4;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .result a {
+            color: #16a34a;
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚡SnapURL</h1>
+        <p>Shorten your long URLs instantly</p>
+
+        <input 
+            type="text" 
+            id="urlInput" 
+            placeholder="Paste your long URL here..."
+        />
+
+        <button onclick="shortenURL()">Shorten</button>
+
+        <div class="result" id="result">
+            <p>Your short URL:</p>
+            <a id="shortURL" href="#" target="_blank"></a>
+        </div>
+    </div>
+
+    <script>
+        async function shortenURL() {
+            const input = document.getElementById('urlInput').value;
+
+            if (!input) {
+                alert('Please enter a URL!');
+                return;
+            }
+
+            const response = await fetch('/shorten', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ original_url: input })
+            });
+
+            const data = await response.json();
+
+            document.getElementById('shortURL').textContent = data.short_url;
+            document.getElementById('shortURL').href = data.short_url;
+            document.getElementById('result').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

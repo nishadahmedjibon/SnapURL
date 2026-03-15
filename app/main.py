@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from .database import engine, Base
 from .routes import router
 
@@ -20,6 +21,8 @@ app.add_middleware(
 
 @app.get("/health")
 def health_check():
-    return {"status": "SnapURL is running !"}
+    return {"status": "SnapURL is running 🚀"}
 
 app.include_router(router)
+
+app.mount("/", StaticFiles(directory="static", html=True), name="static")  # ← add here
