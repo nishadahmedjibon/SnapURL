@@ -5,141 +5,215 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SnapURL</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
+            font-family: 'Segoe UI', sans-serif;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            padding: 20px;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
         }
 
         .container {
-            background: white;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 48px 40px;
+            border-radius: 24px;
             width: 100%;
-            max-width: 500px;
+            max-width: 520px;
             text-align: center;
+            animation: slideUp 0.6s ease;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to   { opacity: 1; transform: translateY(0); }
         }
 
         h1 {
-            color: #333;
-            margin-bottom: 8px;
+            color: #fff;
+            font-size: 32px;
+            margin-bottom: 6px;
+            letter-spacing: -0.5px;
         }
 
-        p {
-            color: #888;
-            margin-bottom: 24px;
+        .subtitle {
+            color: rgba(255,255,255,0.5);
+            font-size: 14px;
+            margin-bottom: 32px;
         }
+
+        .analytics-link {
+            display: block;
+            color: rgba(255,255,255,0.4);
+            font-size: 13px;
+            margin-bottom: 28px;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .analytics-link:hover { color: rgba(255,255,255,0.8); }
 
         input {
             width: 100%;
-            padding: 12px 16px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 16px;
+            padding: 14px 18px;
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 12px;
+            font-size: 15px;
+            color: #fff;
             margin-bottom: 12px;
             outline: none;
+            transition: border 0.2s;
         }
 
-        input:focus {
-            border-color: #4f46e5;
-        }
+        input::placeholder { color: rgba(255,255,255,0.3); }
+        input:focus { border-color: rgba(255,255,255,0.4); }
 
         button {
             width: 100%;
-            padding: 12px;
-            background-color: #4f46e5;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 12px;
             font-size: 16px;
+            font-weight: 600;
             cursor: pointer;
+            transition: transform 0.2s, opacity 0.2s;
         }
 
         button:hover {
-            background-color: #4338ca;
+            transform: translateY(-2px);
+            opacity: 0.9;
         }
 
+        button:active { transform: translateY(0); }
+
         .result {
-            margin-top: 24px;
-            padding: 16px;
-            background-color: #f0fdf4;
-            border-radius: 8px;
+            margin-top: 28px;
+            padding: 20px;
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
             display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .result p {
+            color: rgba(255,255,255,0.5);
+            font-size: 13px;
+            margin-bottom: 8px;
         }
 
         .result a {
-            color: #16a34a;
-            font-weight: bold;
-            text-decoration: none;
+            color: #a78bfa;
+            font-weight: 600;
             font-size: 18px;
+            text-decoration: none;
+            word-break: break-all;
+        }
+
+        .result a:hover { color: #c4b5fd; }
+
+        .copy-btn {
+            margin-top: 14px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            padding: 8px 16px;
+            color: #fff;
+            font-size: 13px;
+            width: auto;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .copy-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: none;
+        }
+
+        footer {
+            margin-top: 32px;
+            color: rgba(255,255,255,0.25);
+            font-size: 12px;
+        }
+
+        footer strong { color: rgba(255,255,255,0.4); }
+
+        @media (max-width: 480px) {
+            .container { padding: 32px 20px; }
+            h1 { font-size: 26px; }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>⚡SnapURL</h1>
-        <a href="/analytics.html" style="color: #4f46e5; font-size: 14px;">View Analytics →</a>
-        <p>Shorten your long URLs instantly</p>
+        <h1>⚡ SnapURL</h1>
+        <p class="subtitle">Shorten your long URLs instantly</p>
+        <a href="/analytics.html" class="analytics-link">View Analytics →</a>
 
-        <input 
-            type="text" 
-            id="urlInput" 
+        <input
+            type="text"
+            id="urlInput"
             placeholder="Paste your long URL here..."
         />
 
-        <button onclick="shortenURL()">Shorten</button>
+        <button onclick="shortenURL()">Shorten URL</button>
 
         <div class="result" id="result">
             <p>Your short URL:</p>
             <a id="shortURL" href="#" target="_blank"></a>
-            <button onclick="copyURL()" id="copyBtn">Copy</button>
+            <br>
+            <button class="copy-btn" onclick="copyURL()" id="copyBtn">Copy</button>
         </div>
-        
+
+        <footer>
+            Built by <strong>Nishad Ahmed Jibon</strong> · © 2026 SnapURL
+        </footer>
     </div>
 
     <script>
         async function shortenURL() {
             const input = document.getElementById('urlInput').value;
-
             if (!input) {
                 alert('Please enter a URL!');
                 return;
             }
-
             const response = await fetch('/shorten', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ original_url: input })
             });
-
             const data = await response.json();
-
             document.getElementById('shortURL').textContent = data.short_url;
             document.getElementById('shortURL').href = data.short_url;
             document.getElementById('result').style.display = 'block';
         }
-    async function copyURL() {
-        const shortURL = document.getElementById('shortURL').textContent;
-        try {
-            await navigator.clipboard.writeText(shortURL);
-            document.getElementById('copyBtn').textContent = 'Copied! ✓';
-            setTimeout(() => {
-                document.getElementById('copyBtn').textContent = 'Copy';
-            }, 2000);
-        } catch(err) {
-            alert('Copy failed!');
+
+        async function copyURL() {
+            const shortURL = document.getElementById('shortURL').textContent;
+            try {
+                await navigator.clipboard.writeText(shortURL);
+                document.getElementById('copyBtn').textContent = 'Copied! ✅';
+                setTimeout(() => {
+                    document.getElementById('copyBtn').textContent = 'Copy';
+                }, 2000);
+            } catch(err) {
+                alert('Copy failed!');
+            }
         }
-    }
     </script>
 </body>
 </html>

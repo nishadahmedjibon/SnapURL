@@ -8,67 +8,146 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
+            font-family: 'Segoe UI', sans-serif;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
             padding: 20px;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
         }
 
         .container {
-            background: white;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 48px 40px;
+            border-radius: 24px;
             width: 100%;
             max-width: 600px;
+            animation: slideUp 0.6s ease;
         }
 
-        h1 { color: #333; margin-bottom: 24px; text-align: center; }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            color: #fff;
+            font-size: 28px;
+            margin-bottom: 28px;
+            text-align: center;
+        }
 
         .stat-box {
-            background: #f0fdf4;
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.1);
             padding: 20px;
-            border-radius: 8px;
+            border-radius: 16px;
             margin-bottom: 16px;
         }
 
-        .stat-box h2 { color: #16a34a; font-size: 32px; }
-        .stat-box p { color: #888; font-size: 14px; }
+        .stat-box h2 {
+            color: #a78bfa;
+            font-size: 36px;
+        }
+
+        .stat-box p {
+            color: rgba(255,255,255,0.5);
+            font-size: 13px;
+            margin-bottom: 6px;
+        }
+
+        .original-url {
+            color: rgba(255,255,255,0.7);
+            font-size: 14px;
+            margin-bottom: 20px;
+            word-break: break-all;
+        }
+
+        .original-url span {
+            color: #a78bfa;
+        }
 
         .click-item {
             padding: 12px;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
             font-size: 14px;
-            color: #555;
+            color: rgba(255,255,255,0.6);
+        }
+
+        .click-item:last-child {
+            border-bottom: none;
+        }
+
+        .clicks-label {
+            color: rgba(255,255,255,0.5);
+            font-size: 13px;
+            margin-bottom: 8px;
         }
 
         input {
             width: 100%;
-            padding: 12px 16px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 16px;
+            padding: 14px 18px;
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 12px;
+            font-size: 15px;
+            color: #fff;
             margin-bottom: 12px;
             outline: none;
+            transition: border 0.2s;
         }
+
+        input::placeholder { color: rgba(255,255,255,0.3); }
+        input:focus { border-color: rgba(255,255,255,0.4); }
 
         button {
             width: 100%;
-            padding: 12px;
-            background-color: #4f46e5;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 12px;
             font-size: 16px;
+            font-weight: 600;
             cursor: pointer;
+            transition: transform 0.2s, opacity 0.2s;
         }
 
-        button:hover { background-color: #4338ca; }
+        button:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
 
-        .result { display: none; margin-top: 24px; }
+        button:active { transform: translateY(0); }
+
+        .result {
+            margin-top: 28px;
+            animation: fadeIn 0.4s ease;
+            display: none;
+        }
+
+        footer {
+            margin-top: 32px;
+            color: rgba(255,255,255,0.25);
+            font-size: 12px;
+            text-align: center;
+        }
+
+        footer strong { color: rgba(255,255,255,0.4); }
+
+        @media (max-width: 480px) {
+            .container { padding: 32px 20px; }
+            h1 { font-size: 22px; }
+        }
     </style>
 </head>
 <body>
@@ -87,11 +166,17 @@
                 <p>Total Clicks</p>
                 <h2 id="totalClicks">0</h2>
             </div>
-            <p><strong>Original URL:</strong> <span id="originalURL"></span></p>
-            <br>
-            <p><strong>Recent Clicks:</strong></p>
+            <p class="original-url">
+                <strong style="color:rgba(255,255,255,0.5)">Original URL:</strong>
+                <span id="originalURL"></span>
+            </p>
+            <p class="clicks-label"><strong>Recent Clicks:</strong></p>
             <div id="clicksList"></div>
         </div>
+
+        <footer>
+            Built by <strong>Nishad Ahmed Jibon</strong> · © 2026 SnapURL
+        </footer>
     </div>
 
     <script>
@@ -103,26 +188,25 @@
             }
             try {
                 const response = await fetch(`/analytics/${code}`);
-                    if (!response.ok) {
-                        throw new Error('Short code not found');
-                    }
-                    const data = await response.json();
-                    document.getElementById('totalClicks').textContent = data.total_clicks;
-                    document.getElementById('originalURL').textContent = data.original_url;
-                    
-                    const clicksList = document.getElementById('clicksList');
-                    clicksList.innerHTML = '';
-                    data.recent_clicks.forEach(click => {
-                        const item = document.createElement('div');
-                        item.className = 'click-item';
-                        item.textContent = `${new Date(click.clicked_at).toLocaleString()} - ${click.ip_address}`;
-                        clicksList.appendChild(item);
-                    });
-                    document.getElementById('result').style.display = 'block';
-                } catch (error) {
-                    alert(error.message);
+                if (!response.ok) {
+                    throw new Error('Short code not found');
                 }
+                const data = await response.json();
+                document.getElementById('totalClicks').textContent = data.total_clicks;
+                document.getElementById('originalURL').textContent = data.original_url;
 
+                const clicksList = document.getElementById('clicksList');
+                clicksList.innerHTML = '';
+                data.recent_clicks.forEach(click => {
+                    const item = document.createElement('div');
+                    item.className = 'click-item';
+                    item.textContent = `${new Date(click.clicked_at).toLocaleString()}`;
+                    clicksList.appendChild(item);
+                });
+                document.getElementById('result').style.display = 'block';
+            } catch (error) {
+                alert(error.message);
+            }
         }
     </script>
 </body>
