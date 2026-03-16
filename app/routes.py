@@ -17,11 +17,16 @@ router = APIRouter()
 BASE_URL = os.getenv("BASE_URL", "http://localhost:8000")
 
 # Redis connection
-redis_client = redis.Redis(
-    host=os.getenv("REDIS_HOST", "redis"),
-    port=int(os.getenv("REDIS_PORT", 6379)),
-    decode_responses=True
-)
+REDIS_URL = os.getenv("REDIS_URL")
+
+if REDIS_URL:
+    redis_client = redis.from_url(REDIS_URL, decode_responses=True)
+else:
+    redis_client = redis.Redis(
+        host=os.getenv("REDIS_HOST", "redis"),
+        port=int(os.getenv("REDIS_PORT", 6379)),
+        decode_responses=True
+    )
 
 # --- Helper function ---
 def generate_short_code(length=6):
