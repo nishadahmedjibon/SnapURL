@@ -35,7 +35,7 @@ This project was built to demonstrate real-world DevOps skills including contain
 
 ---
 
-## 🛠 Tech Stack
+## Tech Stack
 
 | Layer | Technology |
 |---|---|
@@ -49,7 +49,7 @@ This project was built to demonstrate real-world DevOps skills including contain
 
 ---
 
-## 📸 Screenshots
+## Screenshots
 
 ### Home Page
 ![Home](screenshots/home.png)
@@ -125,7 +125,7 @@ curl -X POST https://snapurl-iklo.onrender.com/shorten \
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 ```
 SnapURL/
 ├── app/
@@ -149,7 +149,7 @@ SnapURL/
 
 ---
 
-## ⚙️ CI/CD Pipeline
+## CI/CD Pipeline
 
 Every `git push` to `main` automatically:
 ```
@@ -168,7 +168,7 @@ Live site updated 🚀
 
 ---
 
-## 👨‍💻 Author
+## Author
 
 **Nishad Ahmed Jibon**
 
