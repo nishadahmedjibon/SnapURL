@@ -5,3 +5,6 @@ __pycache__/
 .env
 CONTEXT.md
 ToAddCV.txt
+sql.txt
+localdatabase.txt
+globaldatabase.txt
